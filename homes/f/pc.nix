@@ -12,6 +12,7 @@
     ./features/hardware_monitor
     ./features/vscode
     ./features/dev
+    ./features/shell
 
     ./features/pc
   ];
