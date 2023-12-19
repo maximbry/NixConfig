@@ -56,10 +56,6 @@
         aaaa_disabled = true;
         upstream_timeout = "25s";
         fastest_timeout = "15s";
-        user_rules = ''
-          skydns.ru
-          blockpage.skydns.ru
-        '';
         fallback_dns = [
           "195.10.195.195" # OpenNIC
           "1.1.1.1"
