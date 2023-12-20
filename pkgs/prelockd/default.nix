@@ -10,5 +10,11 @@ pkgs.stdenv.mkDerivation rec {
     sha256 = "sha256-NlDXECD1PPVLXWuhyEEoZH2GOSIKh8feXqPbn89A62o=";
   };
   propagatedBuildInputs = with pkgs; [ python3 ];
-  makeFlags = [ "DESTDIR=${placeholder "out"}" ''PREFIX=""'' ];
+  makeFlags = [
+    "DESTDIR=${placeholder "out"}"
+    "PREFIX="
+    "SYSTEMDUNITDIR=${placeholder "out"}/lib/systemd/system"
+    "SYSTEMDSYSTEMUNITDIR=${placeholder "out"}/lib/systemd/system"
+  ];
+  installFlags = [ "SYSCONFDIR=${placeholder "out"}/etc" ];
 }
