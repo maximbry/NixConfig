@@ -27,13 +27,13 @@
         enableCryptodisk = true;
         useOSProber = true;
         extraEntries = ''
-          menuentry "Reboot to Setup" {
+          menuentry "Firmware setup" {
             fwsetup
           }
           menuentry "Reboot" {
             reboot
           }
-          menuentry "Poweroff" {
+          menuentry "Shutdown" {
             halt
           }
         '';
