@@ -30,7 +30,8 @@
       "w /sys/kernel/debug/sched/min_granularity_ns - - - - 500000"
       "w /sys/kernel/debug/sched/wakeup_granularity_ns  - - - - 0"
       "w /sys/kernel/debug/sched/nr_migrate - - - - 8"
-      "w /proc/sys/vm/overcommit_memory - - - - 2"
+      "w /proc/sys/vm/overcommit_memory - - - - 1"
+      "w /proc/sys/vm/overcommit_ratio - - - - 200"
     ];
   };
 }
