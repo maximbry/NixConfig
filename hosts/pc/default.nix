@@ -31,6 +31,7 @@
   services.xserver.desktopManager.gnome.enable = true;
 
   services.prelockd.enable = true;
+  services.memavaild.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_cachyos;
   networking.firewall.enable = false;
