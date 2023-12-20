@@ -15,7 +15,7 @@ pkgs.stdenv.mkDerivation rec {
 
     PREFIX= DESTDIR=$out SYSTEMDUNITDIR=/lib/systemd/system SYSCONFDIR=/etc make base units
 
-    substituteInPlace $out/lib/systemd/system/prelockd.service \
+    substituteInPlace $out/lib/systemd/system/memavaild.service \
       --replace "ExecStart=" "ExecStart=$out"
 
     runHook postInstall
