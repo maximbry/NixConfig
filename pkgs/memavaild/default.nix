@@ -10,11 +10,14 @@ pkgs.stdenv.mkDerivation rec {
     sha256 = "sha256-qzEQ8iT4TlOeXv0ihyr7Z+oKfsGXIlkKOURkp9PoYFM=";
   };
   propagatedBuildInputs = with pkgs; [ python3 ];
-  makeFlags = [
-    "DESTDIR=${placeholder "out"}"
-    "PREFIX="
-    "SYSTEMDUNITDIR=${placeholder "out"}/lib/systemd/system"
-    "SYSTEMDSYSTEMUNITDIR=${placeholder "out"}/lib/systemd/system"
-  ];
-  installFlags = [ "SYSCONFDIR=${placeholder "out"}/etc" ];
+  installPhase = ''
+    runHook preInstall
+
+    PREFIX= DESTDIR=$out SYSTEMDUNITDIR=/lib/systemd/system SYSCONFDIR=/etc make base units
+
+    substituteInPlace $out/lib/systemd/system/prelockd.service \
+      --replace "ExecStart=" "ExecStart=$out"
+
+    runHook postInstall
+  '';
 }
