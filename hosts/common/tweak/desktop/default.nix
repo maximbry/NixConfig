@@ -12,5 +12,6 @@
     ./elevator-none.nix
     ./pstate.nix
     ./split-lock.nix
+    ./sysrq.nix
   ];
 }
