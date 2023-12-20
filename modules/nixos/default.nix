@@ -1,3 +1,3 @@
 {
-  
+  prelockd = import ./prelockd.nix;
 }
