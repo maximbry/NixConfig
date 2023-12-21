@@ -18,3 +18,22 @@ Example:
 ```
 nix run github:nix-community/disko -- --mode disko ./disko/test/disko.nix  --arg target '"/dev/vda"' # this assumes you are using the comfort shell from this repository
 ```
+
+# Installation steps
+First, you may want to enter the comfort shell.
+Then, format the main disk on which your system will reside:
+
+```
+nix run github:nix-community/disko -- --mode disko ./disko/test/disko.nix  --arg target '"/dev/disk/by-id/ata-Samsung_SSD_860_EVO_250GB_S4BFNF0M805092Z"'
+```
+
+You may also want to do the same to your "data" disks:
+```
+nix run github:nix-community/disko -- --mode disko ./disko/test/single-disk-zfs.nix  --arg target '"/dev/disk/by-id/ata-Samsung_SSD_860_EVO_250GB_S4BFNF0M805092Z"'
+```
+**WARNING**: If you WILL format "data" disks, format them first, and only then the main disk. After that, mount the data disk using `zfs mount zdata/persist`!
+
+Now run `nixos-install`:
+```
+nixos-install --flake .#pc
+```
