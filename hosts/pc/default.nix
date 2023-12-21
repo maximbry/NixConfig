@@ -25,6 +25,7 @@
     ../common/optional/plymouth.nix
     ../common/optional/memavaild.nix
     ../common/optional/prelockd.nix
+    ../common/optional/uresourced.nix
   ];
 
   # temporary
