@@ -27,13 +27,14 @@ in {
     users.users.prelockd = {
       description = "prelockd service user";
       isSystemUser = true;
+      home = "/var/lib/prelockd";
+      createHome = true;
       group = "prelockd";
     };
     users.groups.prelockd = { };
     systemd.packages = [ pkgs.prelockd ];
     systemd.services.prelockd.wantedBy = [ "multi-user.target" ];
     systemd.services.prelockd.restartTriggers = [ confFile ];
-    environment.etc."prelockd.conf".source =
-      confFile;
+    environment.etc."prelockd.conf".source = confFile;
   };
 }
