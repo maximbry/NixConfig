@@ -18,7 +18,7 @@ in {
       default = "";
       description = lib.mdDoc ''
         Extra configuration directives that should be added to
-        `prelockd.conf`
+        `memavaild.conf`
       '';
     };
   };
