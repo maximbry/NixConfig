@@ -53,6 +53,7 @@
           "NixConfig"
           "Git"
           "Vault"
+          "Torrents"
           ".gnupg"
           ".ssh"
           ".nixops"
