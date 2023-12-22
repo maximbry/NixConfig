@@ -45,10 +45,6 @@
       formatter = forEachSystem (pkgs: pkgs.nixpkgs-fmt);
 
       nixosConfigurations = {
-        test = lib.nixosSystem {
-          modules = [ ./hosts/test ];
-          specialArgs = { inherit inputs outputs; };
-        };
         pc = lib.nixosSystem {
           modules = [ ./hosts/pc ];
           specialArgs = { inherit inputs outputs; };
@@ -56,11 +52,6 @@
       };
 
       homeConfigurations = {
-        "f@test" = lib.homeManagerConfiguration {
-          modules = [ ./home/f/test.nix ];
-          pkgs = pkgsFor.x86_64-linux;
-          extraSpecialArgs = { inherit inputs outputs; };
-        };
         "f@pc" = lib.homeManagerConfiguration {
           modules = [ ./home/f/pc.nix ];
           pkgs = pkgsFor.x86_64-linux;
