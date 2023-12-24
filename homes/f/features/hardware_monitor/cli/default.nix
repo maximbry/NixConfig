@@ -20,5 +20,6 @@
     dippi
     pciutils
     usbutils
+    hdparm
   ];
 }
