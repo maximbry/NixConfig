@@ -66,7 +66,7 @@
   boot.zfs = {
     enableUnstable = true;
     removeLinuxDRM = true;
-    allowHibernation = true;
+    allowHibernation = false;
     forceImportRoot = true;
     forceImportAll = true;
   };
