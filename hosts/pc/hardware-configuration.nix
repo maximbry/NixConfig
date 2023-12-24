@@ -67,6 +67,8 @@
     enableUnstable = true;
     removeLinuxDRM = true;
     allowHibernation = true;
+    forceImportRoot = true;
+    forceImportAll = true;
   };
 
   boot.initrd = {
@@ -78,6 +80,7 @@
       lvm.enable = true;
     };
     luks = { reusePassphrases = true; };
+    checkJournalingFS = true;
   };
 
   console.earlySetup = true;

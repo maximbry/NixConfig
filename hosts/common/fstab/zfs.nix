@@ -7,7 +7,6 @@
         allowDiscards = true;
       };
     };
-    zfs = { forceImportRoot = false; };
     supportedFilesystems = [ "zfs" ];
     loader = {
       grub = {
