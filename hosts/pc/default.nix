@@ -33,6 +33,8 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
+  services.ivpn = { enable = true; };
+
   boot.kernelPackages = pkgs.linuxPackages_cachyos;
   networking.firewall.enable = false;
   networking.hostName = "pc";
