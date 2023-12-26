@@ -1,6 +1,6 @@
-{ pkgs ? import <nixpkgs> { }, lib, fetchFromGitHub, ... }:
+{ pkgs, stdenv, lib, fetchFromGitHub, ... }:
 
-pkgs.stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "zapret";
   version = "git-3f80ae2";
   src = fetchFromGitHub {
@@ -19,31 +19,31 @@ pkgs.stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
-    mkdir -p ${placeholder "out"}
+    mkdir -p ${placeholder "out"}/lib/systemd/system ${placeholder "out"}/bin
     cp Makefile ${placeholder "out"}/
-    for g in {nfq,tpws,ip2net,init.d,common}; do
+    for g in {nfq,tpws,ip2net,ipset,init.d,common}; do
       cp -R $g ${placeholder "out"}/
     done
     substituteInPlace ${placeholder "out"}/Makefile \
       --replace "TGT := binaries/my" "TGT := ${placeholder "out"}/bin"
     substituteInPlace ${placeholder "out"}/Makefile \
       --replace "DIRS := nfq tpws ip2net mdig" "DIRS := nfq tpws ip2net"
-    substituteInPlace ${placeholder "out"}/Makefile \
-      --replace "mv" "#mv"
-    substituteInPlace ${placeholder "out"}/Makefile \
-      --replace "ln" "true ; \ #ln"
+    substituteInPlace ${
+      placeholder "out"
+    }/init.d/systemd/zapret-list-update.service \
+      --replace "ExecStart=/opt/zapret" "ExecStart=${placeholder "out"}"
+    substituteInPlace ${placeholder "out"}/init.d/systemd/zapret.service \
+      --replace "ExecStart=/opt/zapret" "ExecStart=${placeholder "out"}"
+
     make all -C ${placeholder "out"}/
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    mv ${placeholder "out"}/nfq/nfqws ${placeholder "out"}/bin/
-    for g in {tpws,ip2net}; do
-      mv ${placeholder "out"}/$g/$g ${placeholder "out"}/bin/
-    done
-    substituteInPlace ${placeholder "out"}/Makefile \
-      --replace "ln" "true ; \ #ln"
+    cp -r ${placeholder "out"}/init.d/systemd/* ${
+      placeholder "out"
+    }/lib/systemd/system
     runHook postInstall
   '';
 }
