@@ -21,16 +21,17 @@ nix run github:nix-community/disko -- --mode disko ./disko/test/disko.nix  --arg
 
 # Installation steps
 First, you may want to enter the comfort shell.
-Then, format the main disk on which your system will reside:
 
+You may want to format your "data" disks:
+```
+nix run github:nix-community/disko -- --mode disko ./disko/test/single-disk-zfs.nix  --arg target '"/dev/disk/by-id/ata-WDC_WD10EZEX-08WN4A0_WD-WCC6Y6EVXVE7"'
+```
+
+Format the main disk on which your system will reside:
 ```
 nix run github:nix-community/disko -- --mode disko ./disko/test/disko.nix  --arg target '"/dev/disk/by-id/ata-Samsung_SSD_860_EVO_250GB_S4BFNF0M805092Z"'
 ```
 
-You may also want to do the same to your "data" disks:
-```
-nix run github:nix-community/disko -- --mode disko ./disko/test/single-disk-zfs.nix  --arg target '"/dev/disk/by-id/ata-Samsung_SSD_860_EVO_250GB_S4BFNF0M805092Z"'
-```
 **WARNING**: If you WILL format "data" disks, format them first, and only then the main disk. After that, mount the data disk using `zfs mount zdata/persist`!
 
 Now run `nixos-install`:
