@@ -12,7 +12,7 @@
   };
 
   fileSystems = {
-    "/data" = {
+    "/mnt/zdata" = {
       device = "zdata/persist";
       fsType = "zfs";
       options = [ "xattr" "posixacl" ];

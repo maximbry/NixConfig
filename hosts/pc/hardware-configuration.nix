@@ -3,6 +3,7 @@
     "${inputs.nixpkgs}/nixos/modules/profiles/all-hardware.nix"
     "${inputs.nixpkgs}/nixos/modules/profiles/qemu-guest.nix"
 
+    ../common/fstab/data.nix
     ../common/fstab/zfs.nix
     ../common/fstab/impermanence.nix
   ];

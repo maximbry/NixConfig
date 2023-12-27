@@ -50,11 +50,11 @@
 
         options = {
           ashift = "13";
-          autotrim = "on";
+          autotrim = "off";
           listsnapshots = "on";
         };
 
-        mountpoint = "/";
+        mountpoint = "/mnt";
 
         datasets = {
           reservation = {
@@ -71,8 +71,8 @@
 
           persist = {
             type = "zfs_fs";
-            mountpoint = "/data";
-            options = { mountpoint = "/data"; };
+            mountpoint = "/zdata";
+            options = { mountpoint = "/zdata"; };
           };
         };
       };
