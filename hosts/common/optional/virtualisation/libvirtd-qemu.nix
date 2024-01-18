@@ -6,7 +6,6 @@
       qemu = {
         runAsRoot = true;
         swtpm = { enable = true; };
-        package = pkgs.qemu_full;
         ovmf = {
           enable = true;
           packages = [ pkgs.OVMFFull ];
@@ -21,6 +20,7 @@
   programs.virt-manager.enable = true;
 
   environment.systemPackages = with pkgs; [
+    qemu
     # QEMU/KVM, provides:
     #   qemu-storage-daemon qemu-edid qemu-ga
     #   qemu-pr-helper qemu-nbd elf2dmp qemu-img qemu-io
@@ -34,6 +34,6 @@
     #   qemu-system-arm qemu-arm qemu-armeb qemu-system-aarch64 qemu-aarch64 qemu-aarch64_be
     #   qemu-system-xtensa qemu-xtensa qemu-system-xtensaeb qemu-xtensaeb
     #   ......
-    qemu_full
+    # qemu_full
   ];
 }
