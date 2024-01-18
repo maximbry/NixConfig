@@ -1,6 +1,6 @@
 {
   boot.supportedFilesystems = [
-    "apfs"
+    # "apfs"
     # "bcachefs"
     "btrfs"
     "cifs"
