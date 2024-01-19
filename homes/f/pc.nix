@@ -16,4 +16,8 @@
 
     ./features/pc
   ];
+
+  programs.plasma = {
+    enable = true;
+  }
 }
