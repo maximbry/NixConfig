@@ -15,7 +15,6 @@
     ../common/optional/virtualisation
     ../common/optional/ananicy.nix
     ../common/optional/dns
-    ../common/optional/irqbalance.nix
     ../common/optional/auto-cpufreq.nix
     ../common/optional/thermald.nix
     ../common/optional/time
@@ -23,9 +22,6 @@
     ../common/optional/cgroups.nix
     ../common/optional/faster-shutdown.nix
     ../common/optional/plymouth.nix
-    ../common/optional/memavaild.nix
-    ../common/optional/prelockd.nix
-    ../common/optional/uresourced.nix
   ];
 
   # temporary
