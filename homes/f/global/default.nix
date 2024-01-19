@@ -1,8 +1,10 @@
 { inputs, lib, pkgs, config, outputs, ... }:
 
 {
-  imports = [ inputs.impermanence.nixosModules.home-manager.impermanence ]
-    ++ (builtins.attrValues outputs.homeManagerModules);
+  imports = [
+    inputs.plasma-manager.homeManagerModules.plasma-manager
+    inputs.impermanence.nixosModules.home-manager.impermanence
+  ] ++ (builtins.attrValues outputs.homeManagerModules);
 
   systemd.user.startServices = "sd-switch";
 

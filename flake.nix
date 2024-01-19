@@ -18,6 +18,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     chaotic = { url = "github:chaotic-cx/nyx/nyxpkgs-unstable"; };
+    plasma-manager.url = "github:pjones/plasma-manager";
+    plasma-manager.inputs.nixpkgs.follows = "nixpkgs";
+    plasma-manager.inputs.home-manager.follows = "home-manager";
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
