@@ -19,5 +19,5 @@
 
   programs.plasma = {
     enable = true;
-  }
+  };
 }
