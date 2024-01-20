@@ -22,8 +22,17 @@
 
     configFile = {
       "baloofilerc"."Basic Settings"."Indexing-Enabled" = false;
+      "kwinrc"."Compositing"."LatencyPolicy" = "low";
+      "kdeglobals"."KDE"."SingleClick" = "false";
+      "kdeglobals"."KDE"."AnimationDurationFactor" = 0;
+      "kxkbrc"."Layout" = {
+        "DisplayNames" = ",";
+        "LayoutList" = "us,ru";
+        "Options" = "grp:alt_shift_toggle";
+        "ResetOldOptions" = true;
+        "Use" = true;
+        "VariantList" = ",";
+      };
     };
-
-
   };
 }

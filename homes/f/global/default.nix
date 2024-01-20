@@ -71,6 +71,7 @@
           ".local/share/Anki2"
           ".local/share/Anki"
           ".local/share/tg"
+          ".local/share/kscreen"
           ".local/bin"
 
           ".config/chromium"
