@@ -19,5 +19,11 @@
 
   programs.plasma = {
     enable = true;
+
+    configFile = {
+      "baloofilerc"."Basic Settings"."Indexing-Enabled" = false;
+    };
+
+
   };
 }
