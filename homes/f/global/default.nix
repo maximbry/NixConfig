@@ -82,6 +82,7 @@
           ".config/Bitwarden CLI"
           ".config/qBittorrent"
           ".config/tg"
+          ".config/obsidian"
         ];
         allowOther = true;
       };
