@@ -63,6 +63,8 @@
           ".vscode"
           ".vscode-insiders"
           ".vscodium"
+          ".zotero"
+          "Zotero"
 
           ".local/share/keyrings"
           ".local/share/direnv"
