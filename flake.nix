@@ -2,10 +2,11 @@
   description = "NixOS";
 
   nixConfig = {
-    extra-substituters = [ "https://nyx.chaotic.cx/" ];
+    extra-substituters = [ "https://nyx.chaotic.cx/" "https://nix-gaming.cachix.org" ];
     extra-trusted-public-keys = [
       "nyx.chaotic.cx-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8="
       "chaotic-nyx.cachix.org-1:HfnXSw4pj95iI/n17rIDy40agHj12WfF+Gqk6SonIT8="
+      "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="
     ];
   };
 
@@ -21,6 +22,7 @@
     plasma-manager.url = "github:pjones/plasma-manager";
     plasma-manager.inputs.nixpkgs.follows = "nixpkgs";
     plasma-manager.inputs.home-manager.follows = "home-manager";
+    nix-gaming.url = "github:fufexan/nix-gaming";
   };
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:

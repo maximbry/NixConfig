@@ -74,6 +74,7 @@
           ".local/share/Anki"
           ".local/share/tg"
           ".local/share/kscreen"
+          ".local/share/bottles"
           ".local/bin"
 
           ".config/chromium"
