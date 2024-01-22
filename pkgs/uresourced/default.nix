@@ -2,11 +2,11 @@
 
 pkgs.stdenv.mkDerivation rec {
   pname = "uresourced";
-  version = "0.5.3-af9cac5b";
+  version = "0.5.4-907d9198";
   src = fetchgit {
     url = "https://gitlab.freedesktop.org/benzea/uresourced.git";
-    rev = "af9cac5b78507c58f72ab6e389583755f50cdc5f";
-    sha256 = "sha256-CXb+c0Yt9O8081mVNOSpaHU6ctB/C598ZDyLntkk66c=";
+    rev = "907d91989f50842caaf9d681e82a9d6791701927";
+    sha256 = "sha256-WTTQYk8tADY9BIfeQ5kFuBbODbRWW8/YCw3vp6O032o=";
   };
 
   nativeBuildInputs = with pkgs; [ meson pkg-config cmake ninja ];
