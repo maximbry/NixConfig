@@ -3,5 +3,6 @@
     zotero
     inputs.nix-gaming.packages.${pkgs.system}.wine-ge
     bottles
+    nekoray
   ];
 }
