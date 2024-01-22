@@ -51,4 +51,8 @@
       BoostIOWeightInc=200
     '';
   };
+
+  services.dbus.packages = [
+    pkgs.uresourced
+  ];
 }
