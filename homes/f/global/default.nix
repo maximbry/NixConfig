@@ -86,6 +86,7 @@
           ".config/qBittorrent"
           ".config/tg"
           ".config/obsidian"
+          ".config/nekoray"
         ];
         allowOther = true;
       };
