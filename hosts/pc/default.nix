@@ -22,6 +22,9 @@
     ../common/optional/cgroups.nix
     ../common/optional/faster-shutdown.nix
     ../common/optional/plymouth.nix
+    ../common/optional/uresourced.nix
+    ../common/optional/prelockd.nix
+    ../common/optional/memavaild.nix
   ];
 
   # temporary
