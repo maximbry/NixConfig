@@ -12,6 +12,6 @@
     withSDL2 = true;
     disableGraphics = true;
     withOpenGL2 = false;
-    withHolmes = true;
+    withHolmes = false;
   };
 }
