@@ -4,7 +4,9 @@
   disableIo ? false,
   withSDL1 ? false, SDL,
   withSDL2 ? true, SDL2,
-  withOpenGL2 ? true, libGL,
+  disableGraphics ? false, libGL,
+  withOpenGLES ? false,
+  withOpenGL2 ? true,
   disableSound ? false,
   withSDL1_mixer ? false, SDL_mixer, 
   withSDL2_mixer ? false, SDL2_mixer,
@@ -82,6 +84,20 @@ let
     else
       sdlMixerFlag)
   ];
+  renderDriver = [
+    (
+      if ((!withOpenGL2 && !disableGraphics && !withOpenGLES) || (withOpenGL2 && withOpenGLES) || (withOpenGL2 && disableGraphics) || (withOpenGLES && disableGraphics)) then
+        abort "Exactly one render driver should be enabled."
+      else if (!withOpenGL2 && withHolmes) then
+        abort "Holmes is supported only with desktop OpenGL."
+      else if disableGraphics then
+        "-dUSE_GLSTUB"
+      else if withOpenGLES then
+        "-dUSE_GLES1"
+      else
+        "-dUSE_OPENGL"
+    )
+  ];
 
   soundFileDrivers = if (!disableSound) then
     optional withVorbis "-dUSE_VORBIS"
@@ -93,8 +109,8 @@ let
 
   dflags = soundDriver ++ soundFileDrivers
     ++ ioDriver
-    ++ optional withHolmes "-dENABLE_HOLMES"
-    ++ optional withOpenGL2 "-dUSE_OPENGL";
+    ++ renderDriver
+    ++ optional withHolmes "-dENABLE_HOLMES";
   # soundFlags
   doom2df-unwrapped = pkgs.stdenv.mkDerivation rec {
     inherit version;
