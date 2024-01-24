@@ -1,10 +1,20 @@
-{ pkgs, lib, stdenv, fetchgit, fetchzip, makeWrapper, makeDesktopItem
-, runCommand, copyDesktopItems, unzip, fpc, SDL2, SDL2_mixer, openal, libX11
-, enet, libGL, glibc, withHolmes ? true, SDL, SDL_mixer, disableIo ? false, withSDL1 ? false, withSDL2 ? true
-, withOpenGL2 ? true, withSDL1_mixer ? false, withSDL2_mixer ? false
-, withOpenAL ? true, disableSound ? false, withVorbis ? true, libvorbis, libogg
-, libxmp, withLibXmp ? true, libmpg123, withMpg123 ? true, libopus, opusfile
-, withOpus ? true }:
+{ pkgs, lib, stdenv, fetchgit, makeWrapper, makeDesktopItem, runCommand, copyDesktopItems,
+  fpc, enet, libX11, glibc,
+  withHolmes ? true,
+  disableIo ? false,
+  withSDL1 ? false, SDL,
+  withSDL2 ? true, SDL2,
+  withOpenGL2 ? true, libGL,
+  disableSound ? false,
+  withSDL1_mixer ? false, SDL_mixer, 
+  withSDL2_mixer ? false, SDL2_mixer,
+  withOpenAL ? true, openal,
+  withVorbis ? true, libvorbis, libogg,
+  withLibXmp ? true, libxmp,
+  withMpg123 ? true, libmpg123,
+  withOpus ? true, libopus, opusfile,
+  ...
+}:
 
 let
   optional = lib.optional;
