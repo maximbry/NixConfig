@@ -1,16 +1,17 @@
 { pkgs, lib, stdenv, fetchgit, makeWrapper, makeDesktopItem, runCommand, copyDesktopItems,
   fpc, enet, libX11, glibc,
-  withHolmes ? true,
-  disableIo ? false,
+  headless ? true,
+  withHolmes ? false,
+  disableIo ? true,
   withSDL1 ? false, SDL,
-  withSDL2 ? true, SDL2,
-  disableGraphics ? false, libGL,
+  withSDL2 ? false, SDL2,
+  disableGraphics ? true, libGL,
   withOpenGLES ? false,
-  withOpenGL2 ? true,
-  disableSound ? false,
-  withSDL1_mixer ? false, SDL_mixer, 
+  withOpenGL2 ? false,
+  disableSound ? true,
+  withSDL1_mixer ? false, SDL_mixer,
   withSDL2_mixer ? false, SDL2_mixer,
-  withOpenAL ? true, openal,
+  withOpenAL ? false, openal,
   withVorbis ? true, libvorbis, libogg,
   withLibXmp ? true, libxmp,
   withMpg123 ? true, libmpg123,
@@ -65,7 +66,7 @@ let
   
   ioDriver = [
     (if ((withSDL1 && withSDL2) || (withSDL1 && disableIo) || (withSDL2 && disableIo)) then
-      abort "You have to choose one system driver (or none)."
+      abort "Exactly one system driver should be enabled (or none)."
     else if (disableIo) then
       "-dUSE_SYSSTUB"
     else if (withSDL1) then
@@ -77,7 +78,7 @@ let
   soundDriver = [
     (if ((withSDL2_mixer && withOpenAL) || (withSDL2_mixer && disableSound)
       || (withOpenAL && disableSound)) then
-      abort "Only one sound driver can be enabled at a time."
+      abort "Exactly one sound driver should be enabled (or none)."
     else if disableSound then
       "-dUSE_SOUNDSTUB"
     else if withOpenAL then
@@ -88,7 +89,7 @@ let
   renderDriver = [
     (
       if ((!withOpenGL2 && !disableGraphics && !withOpenGLES) || (withOpenGL2 && withOpenGLES) || (withOpenGL2 && disableGraphics) || (withOpenGLES && disableGraphics)) then
-        abort "Exactly one render driver should be enabled."
+        abort "Exactly one render driver should be enabled (or none)."
       else if (!withOpenGL2 && withHolmes) then
         abort "Holmes is supported only with desktop OpenGL."
       else if disableGraphics then
@@ -107,13 +108,15 @@ let
     ++ optional withOpus "-dUSE_OPUS"
   else
     [ ];
+  
+  miscFlags = optional withHolmes "-dENABLE_HOLMES"
+              ++ optional headless "-dHEADLESS"
+              ++ optional withMiniupnpc "-dUSE_MINIUPNPC";
 
   dflags = soundDriver ++ soundFileDrivers
     ++ ioDriver
     ++ renderDriver
-    ++ optional withHolmes "-dENABLE_HOLMES"
-    ++ optional withMiniupnpc "-dUSE_MINIUPNPC";
-  # soundFlags
+    ++ miscFlags;
   doom2df-unwrapped = pkgs.stdenv.mkDerivation rec {
     inherit version;
     pname = "doom2df-unwrapped";
