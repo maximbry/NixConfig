@@ -161,6 +161,7 @@ let
     postFixup = ''
       patchelf \
           --add-needed ${glibc}/lib/libpthread.so.0 \
+          --add-needed ${SDL.out}/lib/libSDL-1.2.so.0 \
           --add-needed ${SDL2.out}/lib/libSDL2-2.0.so.0 \
           --add-needed ${SDL2_mixer.out}/lib/libSDL2_mixer-2.0.so.0 \
           --add-needed ${openal.out}/lib/libopenal.so.1 \
