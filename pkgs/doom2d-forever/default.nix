@@ -1,6 +1,6 @@
 { pkgs, lib, stdenv, fetchgit, fetchzip, makeWrapper, makeDesktopItem
 , runCommand, copyDesktopItems, unzip, fpc, SDL2, SDL2_mixer, openal, libX11
-, enet, libGL, glibc, withHolmes ? true, withSDL1 ? false, withSDL2 ? true
+, enet, libGL, glibc, withHolmes ? true, SDL, SDL_mixer, disableIo ? false, withSDL1 ? false, withSDL2 ? true
 , withOpenGL2 ? true, withSDL1_mixer ? false, withSDL2_mixer ? false
 , withOpenAL ? true, disableSound ? false, withVorbis ? true, libvorbis, libogg
 , libxmp, withLibXmp ? true, libmpg123, withMpg123 ? true, libopus, opusfile
@@ -49,24 +49,40 @@ let
       "-dUSE_SDLMIXER"
     else
       "";
-  soundDriver = if ((withSDL2_mixer && withOpenAL)
-    || (withSDL2_mixer && disableSound) || (withOpenAL && disableSound)) then
-    abort "Only one sound driver can be enabled at a time."
-  else if disableSound then
-    "-dUSE_SOUNDSTUB"
-  else if withOpenAL then
-    "-dUSE_OPENAL"
-  else
-    sdlMixerFlag;
+  
+  ioDriver = [
+    (if ((withSDL1 && withSDL2) || (withSDL1 && disableIo) || (withSDL2 && disableIo)) then
+      abort "You have to choose one system driver (or none)."
+    else if (disableIo) then
+      "-dUSE_SYSSTUB"
+    else if (withSDL1) then
+      "-dUSE_SDL"
+    else
+      "-dUSE_SDL2"
+    )
+  ];
+  soundDriver = [
+    (if ((withSDL2_mixer && withOpenAL) || (withSDL2_mixer && disableSound)
+      || (withOpenAL && disableSound)) then
+      abort "Only one sound driver can be enabled at a time."
+    else if disableSound then
+      "-dUSE_SOUNDSTUB"
+    else if withOpenAL then
+      "-dUSE_OPENAL"
+    else
+      sdlMixerFlag)
+  ];
 
-  dflags = [ soundDriver ]
-    ++ (if (!disableSound) then
-      optional withVorbis "-dUSE_VORBIS"
-      ++ optional withLibXmp "-dUSE_XMP"
-      ++ optional withMpg123 "-dUSE_MPG123"
-      ++ optional withOpus "-dUSE_OPUS"
-      else [])
-    ++ optional withSDL2 "-dUSE_SDL2"
+  soundFileDrivers = if (!disableSound) then
+    optional withVorbis "-dUSE_VORBIS"
+    ++ optional withLibXmp "-dUSE_XMP"
+    ++ optional withMpg123 "-dUSE_MPG123"
+    ++ optional withOpus "-dUSE_OPUS"
+  else
+    [ ];
+
+  dflags = soundDriver ++ soundFileDrivers
+    ++ ioDriver
     ++ optional withHolmes "-dENABLE_HOLMES"
     ++ optional withOpenGL2 "-dUSE_OPENGL";
   # soundFlags
@@ -91,16 +107,16 @@ let
     buildInputs = [
       fpc
       enet
-      SDL2.dev
-      SDL2_mixer
-      openal
-      libvorbis
-      libogg
-      libxmp
-      libmpg123
-      libopus
-      opusfile
-    ];
+    ]
+    ++ optional withOpenAL openal
+    ++ optional withSDL1 SDL.dev
+    ++ optional withSDL1_mixer SDL_mixer
+    ++ optional withSDL2 SDL2.dev
+    ++ optional withSDL2_mixer SDL2_mixer.dev
+    ++ optional withLibXmp libxmp
+    ++ optional withMpg123 libmpg123.dev
+    ++ optionals withOpus [libopus.dev opusfile.dev]
+    ++ optionals withVorbis [libvorbis.dev libogg.dev];
 
     buildPhase = ''
       cd src/game
