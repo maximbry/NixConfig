@@ -3,10 +3,12 @@
 , enet, libGL, glibc, withHolmes ? true, withSDL1 ? false, withSDL2 ? true
 , withOpenGL2 ? true, withSDL1_mixer ? false, withSDL2_mixer ? false
 , withOpenAL ? true, disableSound ? false, withVorbis ? true, libvorbis, libogg
-, libxmp, withLibXmp ? true, libmpg123, withMpg123 ? true, libopus, opusfile, withOpus ? true }:
+, libxmp, withLibXmp ? true, libmpg123, withMpg123 ? true, libopus, opusfile
+, withOpus ? true }:
 
 let
   optional = lib.optional;
+  optionals = lib.optionals;
   version = "0.667";
   bin = "Doom2DF";
   rev = "5a9d04dfb16b32c84964c0940031606e7454259d";
@@ -47,7 +49,7 @@ let
       "-dUSE_SDLMIXER"
     else
       "";
-  soundFlags = if ((withSDL2_mixer && withOpenAL)
+  soundDriver = if ((withSDL2_mixer && withOpenAL)
     || (withSDL2_mixer && disableSound) || (withOpenAL && disableSound)) then
     abort "Only one sound driver can be enabled at a time."
   else if disableSound then
@@ -57,12 +59,16 @@ let
   else
     sdlMixerFlag;
 
-  dflags = optional withSDL2 "-dUSE_SDL2"
+  dflags = [ soundDriver ]
+    ++ (if (!disableSound) then
+      optional withVorbis "-dUSE_VORBIS"
+      ++ optional withLibXmp "-dUSE_XMP"
+      ++ optional withMpg123 "-dUSE_MPG123"
+      ++ optional withOpus "-dUSE_OPUS"
+      else [])
+    ++ optional withSDL2 "-dUSE_SDL2"
     ++ optional withHolmes "-dENABLE_HOLMES"
-    ++ optional withOpenGL2 "-dUSE_OPENGL" ++ optional withVorbis "-dUSE_VORBIS"
-    ++ optional withLibXmp "-dUSE_XMP" ++ optional withMpg123 "-dUSE_MPG123"
-    ++ optional withOpus "-dUSE_OPUS"
-    ++ [ soundFlags ];
+    ++ optional withOpenGL2 "-dUSE_OPENGL";
   # soundFlags
   doom2df-unwrapped = pkgs.stdenv.mkDerivation rec {
     inherit version;
@@ -82,8 +88,19 @@ let
       D2DF_BUILD_HASH = "${rev}";
     };
 
-    buildInputs =
-      [ fpc enet SDL2.dev SDL2_mixer openal libvorbis libogg libxmp libmpg123 libopus opusfile ];
+    buildInputs = [
+      fpc
+      enet
+      SDL2.dev
+      SDL2_mixer
+      openal
+      libvorbis
+      libogg
+      libxmp
+      libmpg123
+      libopus
+      opusfile
+    ];
 
     buildPhase = ''
       cd src/game
