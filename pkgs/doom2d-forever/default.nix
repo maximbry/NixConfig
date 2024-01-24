@@ -15,6 +15,7 @@
   withLibXmp ? true, libxmp,
   withMpg123 ? true, libmpg123,
   withOpus ? true, libopus, opusfile,
+  withMiniupnpc ? true, miniupnpc,
   ...
 }:
 
@@ -110,7 +111,8 @@ let
   dflags = soundDriver ++ soundFileDrivers
     ++ ioDriver
     ++ renderDriver
-    ++ optional withHolmes "-dENABLE_HOLMES";
+    ++ optional withHolmes "-dENABLE_HOLMES"
+    ++ optional withMiniupnpc "-dUSE_MINIUPNPC";
   # soundFlags
   doom2df-unwrapped = pkgs.stdenv.mkDerivation rec {
     inherit version;
@@ -142,7 +144,8 @@ let
     ++ optional withLibXmp libxmp
     ++ optional withMpg123 libmpg123.dev
     ++ optionals withOpus [libopus.dev opusfile.dev]
-    ++ optionals withVorbis [libvorbis.dev libogg.dev];
+    ++ optionals withVorbis [libvorbis.dev libogg.dev]
+    ++ optional withMiniupnpc miniupnpc;
 
     buildPhase = ''
       cd src/game
@@ -177,6 +180,7 @@ let
           --add-needed ${libX11.out}/lib/libX11.so.6 \
           --add-needed ${glibc}/lib/libc.so.6 \
           --add-needed ${libGL.out}/lib/libGL.so.1 \
+          --add-needed ${miniupnpc.out}/lib/libminiupnpc.so.17 \
           $out/bin/Doom2DF
     '';
   };
