@@ -2,7 +2,7 @@
 , runCommand, copyDesktopItems, unzip, fpc, SDL2, SDL2_mixer, openal, libX11
 , enet, libGL, glibc, withHolmes ? true, withSDL1 ? false, withSDL2 ? true
 , withOpenGL2 ? true, withSDL1_mixer ? false, withSDL2_mixer ? false
-, withOpenAL ? true, disableSound ? false, withVorbis ? true, libvorbis, libogg }:
+, withOpenAL ? true, disableSound ? false, withVorbis ? true, libvorbis, libogg, libxmp, withLibXmp ? true }:
 
 let
   optional = lib.optional;
@@ -60,6 +60,7 @@ let
     ++ optional withHolmes "-dENABLE_HOLMES"
     ++ optional withOpenGL2 "-dUSE_OPENGL"
     ++ optional withVorbis "-dUSE_VORBIS"
+    ++ optional withLibXmp "-dUSE_XMP"
     ++ [soundFlags];
   # soundFlags
   doom2df-unwrapped = pkgs.stdenv.mkDerivation rec {
@@ -82,7 +83,7 @@ let
       TIME = "12:00:00";
     };
 
-    buildInputs = [ fpc enet SDL2.dev SDL2_mixer openal libvorbis libogg ];
+    buildInputs = [ fpc enet SDL2.dev SDL2_mixer openal libvorbis libogg libxmp ];
 
     buildPhase = ''
       cd src/game
@@ -107,6 +108,7 @@ let
           --add-needed ${libvorbis.out}/lib/libvorbis.so.0 \
           --add-needed ${libvorbis.out}/lib/libvorbisfile.so.3 \
           --add-needed ${libogg.out}/lib/libogg.so.0 \
+          --add-needed ${libxmp.out}/lib/libxmp.so.4 \
           --add-needed ${enet.out}/lib/libenet.so.7 \
           --add-needed ${glibc}/lib/libdl.so.2 \
           --add-needed ${libX11.out}/lib/libX11.so.6 \
