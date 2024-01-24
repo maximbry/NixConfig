@@ -1,0 +1,133 @@
+From 9766e7eaf624863854721b76e56a42dbbdeee0a1 Mon Sep 17 00:00:00 2001
+From: Maxim Brylev <github.maximbry@skiff.com>
+Date: Wed, 24 Jan 2024 14:59:45 +0300
+Subject: [PATCH] feat: respect SOURCE_DATE_EPOCH
+
+---
+ src/game/g_basic.pas       | 40 ++++++++++++++++++++++++++++++++++++--
+ src/game/g_console.pas     |  2 +-
+ src/game/g_main.pas        |  2 +-
+ src/game/sdl/g_system.pas  |  2 +-
+ src/game/sdl2/g_system.pas |  2 +-
+ 5 files changed, 42 insertions(+), 6 deletions(-)
+
+diff --git a/src/game/g_basic.pas b/src/game/g_basic.pas
+index ccfd5d9..335158e 100644
+--- a/src/game/g_basic.pas
++++ b/src/game/g_basic.pas
+@@ -22,8 +22,6 @@ uses
+ 
+ const
+   GAME_VERSION  = '0.667';
+-  GAME_BUILDDATE = {$I %DATE%};
+-  GAME_BUILDTIME = {$I %TIME%};
+   UID_GAME    = 1;
+   UID_PLAYER  = 2;
+   UID_MONSTER = 3;
+@@ -38,6 +36,8 @@ type
+   DWArray = array of DWORD;
+   String20 = String[20];
+ 
++function g_GetBuildDate (): AnsiString;
++function g_GetBuildTime (): AnsiString;
+ function g_GetBuilderName (): AnsiString;
+ function g_GetBuildHash (full: Boolean = True): AnsiString;
+ function g_GetBuildArch (): AnsiString;
+@@ -107,6 +107,42 @@ uses
+ {$PUSH}
+ {$WARN 2054 OFF} // unknwon env var
+ {$WARN 6018 OFF} // unreachable code
++function UnixToDateTime(const AValue: Int64): TDateTime;
++const
++  TDateTimeEpsilon = 2.2204460493e-16 ;
++  UnixEpoch = TDateTime(-2415018.5) + TDateTime(2440587.5) ;
++begin
++  Result:=UnixEpoch + AValue/SecsPerDay;
++  if (UnixEpoch>=0) and (Result<-TDateTimeEpsilon) then
++    Result:=int(Result-1.0+TDateTimeEpsilon)-frac(1.0+frac(Result));
++end;
++
++function g_GetBuildDate (): AnsiString;
++var
++  Year, Month, Day: Word;
++begin
++  if {$I %SOURCE_DATE_EPOCH%} <> '' then
++    begin
++      DecodeDate(UnixToDateTime(StrToInt64({$I %SOURCE_DATE_EPOCH%})), Year, Month, Day);
++      result := format('%d/%d/%d', [Year, Month, Day]);
++    end
++  else
++    result := {$I %DATE%};
++end;
++
++function g_GetBuildTime (): AnsiString;
++var
++  Hour, Minute, Second, Millisecond: Word;
++begin
++  if {$I %SOURCE_DATE_EPOCH%} <> '' then
++    begin
++      DecodeTime(UnixToDateTime(StrToInt64({$I %SOURCE_DATE_EPOCH%})), Hour, Minute, Second, Millisecond);
++      result := format('%d:%d:%d', [Hour, Minute, Second]);
++    end
++  else
++    result := {$I %TIME%};
++end;
++
+ function g_GetBuilderName (): AnsiString;
+ begin
+   if {$I %D2DF_BUILD_USER%} <> '' then
+diff --git a/src/game/g_console.pas b/src/game/g_console.pas
+index f7998c7..fce42ab 100644
+--- a/src/game/g_console.pas
++++ b/src/game/g_console.pas
+@@ -703,7 +703,7 @@ begin
+   begin
+     conwriteln('Doom 2D: Forever v. ' + GAME_VERSION);
+     conwritefln('Net protocol v. %d', [NET_PROTOCOL_VER]);
+-    conwritefln('Build date: %s at %s', [GAME_BUILDDATE, GAME_BUILDTIME]);
++    conwritefln('Build date: %s at %s', [g_GetBuildDate(), g_GetBuildTime()]);
+   end;
+ 
+   if cmd = 'alias' then
+diff --git a/src/game/g_main.pas b/src/game/g_main.pas
+index 80b5e7a..eb509d2 100644
+--- a/src/game/g_main.pas
++++ b/src/game/g_main.pas
+@@ -456,7 +456,7 @@ begin
+   e_InitWritelnDriver();
+   e_WriteLog('Doom 2D: Forever version ' + GAME_VERSION + ' proto ' + IntToStr(NET_PROTOCOL_VER), TMsgType.Notify);
+   e_WriteLog('Build arch: ' + g_GetBuildArch(), TMsgType.Notify);
+-  e_WriteLog('Build date: ' + GAME_BUILDDATE + ' ' + GAME_BUILDTIME, TMsgType.Notify);
++  e_WriteLog('Build date: ' + g_GetBuildDate() + ' ' + g_GetBuildTime(), TMsgType.Notify);
+   e_WriteLog('Build hash: ' + g_GetBuildHash(), TMsgType.Notify);
+   e_WriteLog('Build by: ' + g_GetBuilderName(), TMsgType.Notify);
+ 
+diff --git a/src/game/sdl/g_system.pas b/src/game/sdl/g_system.pas
+index 9f56262..3a14c9f 100644
+--- a/src/game/sdl/g_system.pas
++++ b/src/game/sdl/g_system.pas
+@@ -154,7 +154,7 @@ implementation
+   begin
+     info := g_GetBuildHash(false);
+     if info = 'custom build' then
+-      info := info + ' by ' + g_GetBuilderName() + ' ' + GAME_BUILDDATE + ' ' + GAME_BUILDTIME;
++      info := info + ' by ' + g_GetBuilderName() + ' ' + g_GetBuildDate() + ' ' + g_GetBuildTime();
+     result := Format(GameTitle, [GetDriver(), info]);
+   end;
+ 
+diff --git a/src/game/sdl2/g_system.pas b/src/game/sdl2/g_system.pas
+index 6f48d28..4e6efc6 100644
+--- a/src/game/sdl2/g_system.pas
++++ b/src/game/sdl2/g_system.pas
+@@ -149,7 +149,7 @@ implementation
+   begin
+     info := g_GetBuildHash(false);
+     if info = 'custom build' then
+-      info := info + ' by ' + g_GetBuilderName() + ' ' + GAME_BUILDDATE + ' ' + GAME_BUILDTIME;
++      info := info + ' by ' + g_GetBuilderName() + ' ' + g_GetBuildDate() + ' ' + g_GetBuildTime();
+     result := Format(GameTitle, [info]);
+   end;
+ 
+-- 
+2.43.0
+
