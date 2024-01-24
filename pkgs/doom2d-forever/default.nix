@@ -1,7 +1,8 @@
 { pkgs, lib, stdenv, fetchgit, fetchzip, makeWrapper, makeDesktopItem
 , runCommand, copyDesktopItems, unzip, fpc, SDL2, SDL2_mixer, openal, libX11
-, enet, libGL, glibc, withHolmes ? true, withSDL2 ? true, withOpenGL2 ? true
-, withSDL2_mixer ? true }:
+, enet, libGL, glibc, withHolmes ? true, withSDL1 ? false, withSDL2 ? true
+, withOpenGL2 ? true, withSDL1_mixer ? false, withSDL2_mixer ? false
+, withOpenAL ? true, disableSound ? false, vorbis }:
 
 let
   optional = lib.optional;
@@ -38,9 +39,28 @@ let
     # Comment[ru]=Платформер с сетевой игрой во вселенной классического Doom, современный порт игры Doom 2D от Prikol Software
     # Keywords=Doom;Doom2D;Doom2D Forever;Forever;Shooter;Doom 2D;
   };
-  enabledFlags = (optional withHolmes "-dENABLE_HOLMES")
-    ++ (optional withSDL2 "-dUSE_SDL2") ++ (optional withOpenGL2 "-dUSE_OPENGL")
-    ++ (optional withSDL2_mixer "-dUSE_SDLMIXER");
+  sdlMixerFlag =
+    if ((withSDL2_mixer && withSDL1) || (withSDL1_mixer && withSDL2)) then
+      abort "You can't mix different versions of SDL and SDL_Mixer."
+    else if (withSDL1_mixer || withSDL2_mixer) then
+      "-dUSE_SDLMIXER"
+    else
+      "";
+  soundFlags = if ((withSDL2_mixer && withOpenAL)
+    || (withSDL2_mixer && disableSound) || (withOpenAL && disableSound)) then
+    abort "Only one sound driver can be enabled at a time."
+  else if disableSound then
+    "-dUSE_SOUNDSTUB"
+  else if withOpenAL then
+    "-dUSE_OPENAL"
+  else
+    sdlMixerFlag;
+
+  dflags = optional withSDL2 "-dUSE_SDL2 "
+    ++ optional withHolmes "-dENABLE_HOLMES "
+    ++ optional withOpenGL2 "-dUSE_OPENGL "
+    ++ [soundFlags];
+  # soundFlags
   doom2df-unwrapped = pkgs.stdenv.mkDerivation rec {
     inherit version;
     pname = "doom2df-unwrapped";
@@ -61,13 +81,13 @@ let
       TIME = "12:00:00";
     };
 
-    buildInputs = [ fpc enet SDL2.dev SDL2_mixer ];
+    buildInputs = [ fpc enet SDL2.dev SDL2_mixer openal ];
 
     buildPhase = ''
       cd src/game
-      fpc -FE. -FU. -al Doom2DF.lpr ${lib.concatStringsSep " " enabledFlags}
+      fpc -FE. -FU. -al Doom2DF.lpr ${lib.concatStringsSep " " dflags}
       cd ../..
-      cp src/game/Doom2DF .
+      cp src/game/${bin} .
     '';
 
     installPhase = ''
@@ -82,6 +102,7 @@ let
           --add-needed ${glibc}/lib/libpthread.so.0 \
           --add-needed ${SDL2.out}/lib/libSDL2-2.0.so.0 \
           --add-needed ${SDL2_mixer.out}/lib/libSDL2_mixer-2.0.so.0 \
+          --add-needed ${openal.out}/lib/libopenal.so.1 \
           --add-needed ${enet.out}/lib/libenet.so.7 \
           --add-needed ${glibc}/lib/libdl.so.2 \
           --add-needed ${libX11.out}/lib/libX11.so.6 \
