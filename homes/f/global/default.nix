@@ -56,6 +56,7 @@
           "Git"
           "Vault"
           "Torrents"
+          "Zotero"
           ".gnupg"
           ".ssh"
           ".nixops"
@@ -64,7 +65,7 @@
           ".vscode-insiders"
           ".vscodium"
           ".zotero"
-          "Zotero"
+          ".doom2df"
 
           ".local/share/keyrings"
           ".local/share/direnv"
