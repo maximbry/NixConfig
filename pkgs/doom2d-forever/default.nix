@@ -25,6 +25,7 @@ let
   optionals = lib.optionals;
   version = "0.667";
   bin = "Doom2DF";
+  finalBin = if headless then "Doom2DF_H" else "Doom2DF";
   rev = "5a9d04dfb16b32c84964c0940031606e7454259d";
   meta = {
     description = "Doom-themed platformer with network play";
@@ -188,21 +189,22 @@ let
     '';
   };
   pname = "doom2df";
-  name = "doom2df-${version}";
+  name = "doom2df-${version}-${if headless then "headless" else "desktop"}";
 in runCommand name rec {
   inherit doom2df-unwrapped;
-  inherit version;
+  inherit version name pname;
   nativeBuildInputs = [ makeWrapper copyDesktopItems ];
   desktopItems = [ desktopItem ];
   passthru = {
     inherit version;
     meta = meta // { hydraPlatforms = [ ]; };
   };
+  outputs = ["out"];
 } (''
   mkdir -p $out/bin
-  ln -s ${doom2df-unwrapped}/bin/${bin} $out/bin/${bin}
+  ln -s ${doom2df-unwrapped}/bin/${bin} $out/bin/${finalBin}
   mkdir -p $out/share
   ln -s ${doom2df-unwrapped}/share/icons $out/share/icons
   copyDesktopItems
-  wrapProgram $out/bin/${bin} --add-flags "--ro-dir \$HOME/.doom2df"
+  wrapProgram $out/bin/${finalBin} --add-flags "--ro-dir \$HOME/.doom2df"
 '')

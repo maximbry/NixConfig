@@ -5,5 +5,6 @@
     bottles
     nekoray
     doom2d-forever
+    doom2d-forever-headless
   ];
 }
