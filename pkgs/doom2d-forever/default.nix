@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenv, fetchgit, makeWrapper, makeDesktopItem, runCommand, copyDesktopItems,
+{ pkgs, lib, stdenv, fetchgit, makeWrapper, makeDesktopItem, runCommand, copyDesktopItems, autoPatchelfHook,
   fpc, enet, libX11, glibc,
   headless ? false,
   withHolmes ? true,
@@ -136,7 +136,8 @@ let
       D2DF_BUILD_HASH = "${rev}";
     };
 
-    buildInputs = [
+    nativeBuildInputs = [
+      autoPatchelfHook
       fpc
       enet
     ]
@@ -149,6 +150,21 @@ let
     ++ optional withMpg123 libmpg123.dev
     ++ optionals withOpus [libopus.dev opusfile.dev]
     ++ optionals withVorbis [libvorbis.dev libogg.dev]
+    ++ optional withMiniupnpc miniupnpc;
+
+    buildInputs = [
+      glibc
+    ]
+    ++ optionals (!disableGraphics) [libGL libX11]
+    ++ optional withSDL1 SDL
+    ++ optional withSDL1_mixer SDL_mixer
+    ++ optional withSDL2 SDL2
+    ++ optional withSDL2_mixer SDL2_mixer
+    ++ optional withOpenAL openal
+    ++ optional (!disableSound && withLibXmp) libxmp
+    ++ optional (!disableSound && withMpg123) libmpg123
+    ++ optionals (!disableSound && withOpus) [libopus opusfile]
+    ++ optionals (!disableSound && withVorbis) [libvorbis libogg]
     ++ optional withMiniupnpc miniupnpc;
 
     buildPhase = ''
@@ -164,29 +180,12 @@ let
       install -Dm755 ./${bin} "$out/bin/${bin}"
     '';
 
-    dontPatchELF = true;
-    postFixup = ''
+    postFixup = if (!disableGraphics) then ''
       patchelf \
-          --add-needed ${glibc}/lib/libpthread.so.0 \
-          --add-needed ${SDL.out}/lib/libSDL-1.2.so.0 \
-          --add-needed ${SDL2.out}/lib/libSDL2-2.0.so.0 \
-          --add-needed ${SDL2_mixer.out}/lib/libSDL2_mixer-2.0.so.0 \
-          --add-needed ${openal.out}/lib/libopenal.so.1 \
-          --add-needed ${libvorbis.out}/lib/libvorbis.so.0 \
-          --add-needed ${libvorbis.out}/lib/libvorbisfile.so.3 \
-          --add-needed ${libogg.out}/lib/libogg.so.0 \
-          --add-needed ${libxmp.out}/lib/libxmp.so.4 \
-          --add-needed ${libmpg123.out}/lib/libmpg123.so.0 \
-          --add-needed ${libopus.out}/lib/libopus.so.0 \
-          --add-needed ${opusfile.out}/lib/libopusfile.so.0 \
-          --add-needed ${enet.out}/lib/libenet.so.7 \
-          --add-needed ${glibc}/lib/libdl.so.2 \
-          --add-needed ${libX11.out}/lib/libX11.so.6 \
-          --add-needed ${glibc}/lib/libc.so.6 \
           --add-needed ${libGL.out}/lib/libGL.so.1 \
-          --add-needed ${miniupnpc.out}/lib/libminiupnpc.so.17 \
           $out/bin/Doom2DF
-    '';
+    '' else "";
+
   };
   pname = "doom2df";
   name = "doom2df-${version}-${if headless then "headless" else "desktop"}";
@@ -199,6 +198,7 @@ in runCommand name rec {
     inherit version;
     meta = meta // { hydraPlatforms = [ ]; };
   };
+  platforms = [ "x86_64-linux" ];
   outputs = ["out"];
 } (''
   mkdir -p $out/bin
