@@ -1,5 +1,7 @@
 { pkgs, lib, stdenv, fetchgit, makeWrapper, makeDesktopItem, runCommand, copyDesktopItems, autoPatchelfHook,
   fpc, enet, libX11, glibc,
+  targetProcessor ? "ATHLON64",
+  sseSupport ? ["SSE64"],
   headless ? false,
   withHolmes ? true,
   disableIo ? false,
@@ -113,11 +115,15 @@ let
   miscFlags = optional withHolmes "-dENABLE_HOLMES"
               ++ optional headless "-dHEADLESS"
               ++ optional withMiniupnpc "-dUSE_MINIUPNPC";
+  
+  optimizationFlags = ["-Op${targetProcessor}" "-Cp${targetProcessor}"] ++ (map (x: "-Cf" + x) sseSupport);
 
   dflags = soundDriver ++ soundFileDrivers
     ++ ioDriver
     ++ renderDriver
-    ++ miscFlags;
+    ++ miscFlags
+    ++ optimizationFlags;
+
   doom2df-unwrapped = pkgs.stdenv.mkDerivation rec {
     inherit version;
     pname = "doom2df-unwrapped";
@@ -169,7 +175,7 @@ let
 
     buildPhase = ''
       cd src/game
-      fpc -FE. -FU. -al Doom2DF.lpr ${lib.concatStringsSep " " dflags}
+      fpc -al Doom2DF.lpr -FE. -FU. ${lib.concatStringsSep " " dflags}
       cd ../..
       cp src/game/${bin} .
     '';
