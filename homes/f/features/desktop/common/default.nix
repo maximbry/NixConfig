@@ -1,6 +1,6 @@
 { pkgs, inputs, ... }: {
   home.packages = with pkgs; [
-    zotero
+    zotero-7
     inputs.nix-gaming.packages.${pkgs.system}.wine-ge
     bottles
     nekoray

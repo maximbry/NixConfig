@@ -14,4 +14,5 @@
     withOpenGL2 = false;
     withHolmes = false;
   };
+  zotero-7 = pkgs.callPackage ./zotero-7 {};
 }
