@@ -6,7 +6,7 @@
         id = 0;
         name = "test";
         extraConfig = ''
-                  user_pref("general.smoothScroll",   true);
+          user_pref("general.smoothScroll",   true);
           user_pref("general.smoothScroll.msdPhysics.continuousMotionMaxDeltaMS",   12);
           user_pref("general.smoothScroll.msdPhysics.enabled",                    true);
           user_pref("general.smoothScroll.msdPhysics.motionBeginSpringConstant",   200);
@@ -49,6 +49,9 @@
           user_pref("mousewheel.min_line_scroll_amount",                             5);
           user_pref("toolkit.scrollbox.horizontalScrollDistance",                    5);
           user_pref("toolkit.scrollbox.verticalScrollDistance",                      3);
+
+          // allow copying images
+          user_pref("dom.events.asyncClipboard.clipboardItem", true);
         '';
       };
     };
