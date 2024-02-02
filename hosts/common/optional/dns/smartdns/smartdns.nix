@@ -25,7 +25,7 @@
       serve-expired = true;
       serve-expired-ttl = 259200;
       serve-expired-reply-ttl = 3;
-      edns-client-subnet = "178.70.32/24";
+      edns-client-subnet = "178.70.22.18/24";
       server-https = https.reliable ++ https.russian;
       server = plain.russian;
     };
