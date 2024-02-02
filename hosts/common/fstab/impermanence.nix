@@ -13,6 +13,7 @@
       "/var/lib/libvirt"
       "/etc/libvirt"
       "/etc/NetworkManager/system-connections"
+      "/var/cache/smartdns"
       "/srv"
       {
         directory = "/var/lib/colord";

@@ -21,6 +21,10 @@
       speed-check-mode = "ping,tcp:443,tcp:80";
       response-mode = "fastest-ip";
       cache-size = 32768;
+      cache-persist = true;
+      cache-file = "/var/cache/smartdns/smartdns.cache";
+      cache-checkpoint-time = 86400;
+      serve-expired-prefetch-time = 21600;
       prefetch-domain = true;
       serve-expired = true;
       serve-expired-ttl = 259200;
