@@ -4,6 +4,5 @@
       bitwarden-cli
       bitwarden-menu
       passwdqc
-      pwgen
     ];
 }
