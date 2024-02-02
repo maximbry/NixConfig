@@ -33,6 +33,7 @@
   services.xserver.desktopManager.plasma5.enable = true;
 
   services.ivpn = { enable = true; };
+  programs.adb.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_cachyos;
   networking.firewall.enable = false;
