@@ -76,6 +76,7 @@
           ".local/share/tg"
           ".local/share/kscreen"
           ".local/share/bottles"
+          ".local/share/TelegramDesktop"
           ".local/bin"
 
           ".config/chromium"
