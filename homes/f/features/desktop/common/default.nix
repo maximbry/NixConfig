@@ -8,5 +8,6 @@
     doom2d-forever-headless
     genpw
     telegram-desktop
+    pkgs.inputs.nixpkgs-master.pdfannots2json
   ];
 }
