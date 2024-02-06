@@ -13,6 +13,20 @@
 
   additions = final: _prev: import ../pkgs { pkgs = final; };
   modifications = final: prev: {
+    doom2d-forever = prev.doom2d-forever.override {
+      fpc = final.fpc-git;
+      targetProcessorSoft = "X86-64-V3";
+      targetProcessorHard = "COREAVX2";
+      sseSupport = [ "X86-64-V3" ];
+      optimizationLevel = 4;
+    };
+    doom2d-forever-headless = prev.doom2d-forever-headless.override {
+      fpc = final.fpc-git;
+      targetProcessorSoft = "X86-64-V3";
+      targetProcessorHard = "COREAVX2";
+      sseSupport = [ "X86-64-V3" ];
+      optimizationLevel = 4;
+    };
     fpc-git = prev.fpc.overrideAttrs (oldAttrs: {
       src = final.fetchgit {
         url = "https://gitlab.com/freepascal.org/fpc/source.git";
