@@ -28,7 +28,7 @@ let
   version = "0.667";
   bin = "Doom2DF";
   finalBin = if headless then "Doom2DF_H" else "Doom2DF";
-  rev = "5a9d04dfb16b32c84964c0940031606e7454259d";
+  rev = "b630b2f493a20e331c16cbd04bb1eaf432f337d4";
   meta = {
     description = "Doom-themed platformer with network play";
     longDescription = ''
@@ -132,7 +132,7 @@ let
     src = fetchgit {
       url = "https://repo.or.cz/d2df-sdl.git";
       inherit rev;
-      sha256 = "sha256-lOBDopKffjGPBqF0UA47D9pbX9t5SdrgV95uwDhXrOc=";
+      sha256 = "sha256-HemDyGhKYJ/GI3SF0qW9ge7PqU5fPpDRspfaCzBmMn4=";
     };
 
     patches = [ ./0001-feat-respect-SOURCE_DATE_EPOCH.patch ./0001-fix-Fix-compilation-on-FPC-3.3.1.patch ];
