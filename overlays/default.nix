@@ -19,6 +19,7 @@
       targetProcessorHard = "COREAVX2";
       sseSupport = [ "X86-64-V3" ];
       optimizationLevel = 4;
+      doWholeProgramOptimization = true;
     };
     doom2d-forever-headless = prev.doom2d-forever-headless.override {
       fpc = final.fpc-git;
@@ -26,6 +27,7 @@
       targetProcessorHard = "COREAVX2";
       sseSupport = [ "X86-64-V3" ];
       optimizationLevel = 4;
+      doWholeProgramOptimization = true;
     };
     fpc-git = prev.fpc.overrideAttrs (oldAttrs: {
       src = final.fetchgit {
