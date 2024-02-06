@@ -1,6 +1,8 @@
 { pkgs, lib, stdenv, fetchgit, makeWrapper, makeDesktopItem, runCommand, copyDesktopItems, autoPatchelfHook,
   fpc, enet, libX11, glibc,
-  targetProcessor ? "ATHLON64",
+  targetProcessorSoft ? "ATHLON64",
+  targetProcessorHard ? "ATHLON64",
+  optimizationLevel ? 2,
   sseSupport ? ["SSE64"],
   headless ? false,
   withHolmes ? true,
@@ -116,7 +118,7 @@ let
               ++ optional headless "-dHEADLESS"
               ++ optional withMiniupnpc "-dUSE_MINIUPNPC";
   
-  optimizationFlags = ["-Op${targetProcessor}" "-Cp${targetProcessor}"] ++ (map (x: "-Cf" + x) sseSupport);
+  optimizationFlags = ["-O${builtins.toString optimizationLevel}" "-Op${targetProcessorSoft}" "-Cp${targetProcessorHard}"] ++ (map (x: "-Cf" + x) sseSupport);
 
   dflags = soundDriver ++ soundFileDrivers
     ++ ioDriver
