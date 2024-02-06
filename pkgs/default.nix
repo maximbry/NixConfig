@@ -1,10 +1,12 @@
-{ pkgs ? import <nixpkgs> { } }: rec {
+{ pkgs }: rec {
   prelockd = pkgs.callPackage ./prelockd { };
   memavaild = pkgs.callPackage ./memavaild { };
   uresourced = pkgs.callPackage ./uresourced { };
   zapret = pkgs.callPackage ./zapret { };
   nekoray = pkgs.callPackage ./nekoray { };
-  doom2d-forever = pkgs.callPackage ./doom2d-forever { };
+  doom2d-forever = pkgs.callPackage ./doom2d-forever rec {
+    fpc = pkgs.fpc-git;
+  };
   doom2d-forever-headless = pkgs.callPackage ./doom2d-forever {
     headless = true;
     withOpenAL = false;

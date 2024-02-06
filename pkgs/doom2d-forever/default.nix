@@ -135,7 +135,7 @@ let
       sha256 = "sha256-lOBDopKffjGPBqF0UA47D9pbX9t5SdrgV95uwDhXrOc=";
     };
 
-    patches = [ ./0001-feat-respect-SOURCE_DATE_EPOCH.patch ];
+    patches = [ ./0001-feat-respect-SOURCE_DATE_EPOCH.patch ./0001-fix-Fix-compilation-on-FPC-3.3.1.patch ];
 
     env = {
       D2DF_BUILD_USER = "nix";

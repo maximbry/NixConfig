@@ -1,0 +1,43 @@
+From e291c6f39ec96411231f07e8d660606bcb46929b Mon Sep 17 00:00:00 2001
+From: maximbry <github@maximbry.anonaddy.com>
+Date: Tue, 6 Feb 2024 20:25:57 +0300
+Subject: [PATCH] fix: Fix compilation on FPC 3.3.1
+
+---
+ src/shared/xparser.pas | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/shared/xparser.pas b/src/shared/xparser.pas
+index f18ff98..ab02c81 100644
+--- a/src/shared/xparser.pas
++++ b/src/shared/xparser.pas
+@@ -110,8 +110,8 @@ type
+     constructor Create (aopts: TOptions=[TOption.SignedNumbers]);
+     destructor Destroy (); override;
+ 
+-    procedure error (const amsg: AnsiString); noreturn;
+-    procedure errorfmt (const afmt: AnsiString; const args: array of const); noreturn;
++    procedure error (const amsg: AnsiString);
++    procedure errorfmt (const afmt: AnsiString; const args: array of const);
+ 
+     function skipChar (): Boolean; // returns `false` on eof
+ 
+@@ -322,13 +322,13 @@ begin
+ end;
+ 
+ 
+-procedure TTextParser.error (const amsg: AnsiString); noreturn;
++procedure TTextParser.error (const amsg: AnsiString);
+ begin
+   raise TParserException.Create(self, amsg);
+ end;
+ 
+ 
+-procedure TTextParser.errorfmt (const afmt: AnsiString; const args: array of const); noreturn;
++procedure TTextParser.errorfmt (const afmt: AnsiString; const args: array of const);
+ begin
+   raise TParserException.CreateFmt(self, afmt, args);
+ end;
+-- 
+2.43.0
+
