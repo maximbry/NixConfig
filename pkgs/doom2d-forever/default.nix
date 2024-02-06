@@ -4,6 +4,7 @@
   targetProcessorHard ? "ATHLON64",
   optimizationLevel ? 2,
   sseSupport ? ["SSE64"],
+  doWholeProgramOptimization ? false,
   headless ? false,
   withHolmes ? true,
   disableIo ? false,
@@ -175,9 +176,18 @@ let
     ++ optionals (!disableSound && withVorbis) [libvorbis libogg]
     ++ optional withMiniupnpc miniupnpc;
 
+    buildCmd = if doWholeProgramOptimization then
+        "fpc -al Doom2DF.lpr -FE. -FU. ${lib.concatStringsSep " " dflags} -CX -XX -Xs- -FWfeedbackfile.wpo -OWall"
+      else
+        "fpc -al Doom2DF.lpr -FE. -FU. ${lib.concatStringsSep " " dflags}";
+
     buildPhase = ''
       cd src/game
-      fpc -al Doom2DF.lpr -FE. -FU. ${lib.concatStringsSep " " dflags}
+      ls
+      echo "1"
+      ${buildCmd}
+      echo "2"
+      ${if doWholeProgramOptimization then "fpc -al Doom2DF.lpr -FE. -FU. ${lib.concatStringsSep " " dflags} -CX -XX -Fwfeedbackfile.wpo -Owall " else ""}
       cd ../..
       cp src/game/${bin} .
     '';
