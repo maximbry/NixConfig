@@ -50,7 +50,7 @@
           Valid values: True | False
           Default value: False
 
-      zram_checking_enabled = False
+      zram_checking_enabled = True
 
       ###############################################################################
 
@@ -357,54 +357,54 @@
           7.2.5. Matching /proc/[pid]/exe realpath with RE patterns
 
           Example:
-          @BADNESS_ADJ_RE_REALPATH  20  ///  ^/usr/bin/foo$
+          @BADNESS_ADJ_RE_REALPATH  20  ///  ^/nix/store/.*/bin/foo$
 
           Protect X.
-      @BADNESS_ADJ_RE_REALPATH -200  ///  ^(/usr/libexec/Xorg|/usr/lib/xorg/Xorg|/usr/lib/Xorg|/usr/bin/X|/usr/bin/Xorg|/usr/bin/Xwayland|/usr/bin/weston|/usr/bin/sway)$
+      @BADNESS_ADJ_RE_REALPATH -200  ///  ^/nix/store/.*(/libexec/Xorg|/lib/xorg/Xorg|/lib/Xorg|/bin/X|/bin/Xorg|/bin/Xwayland|/bin/weston|/bin/sway)$
 
           Protect GNOME.
-      @BADNESS_ADJ_RE_REALPATH -200  ///  ^(/usr/bin/gnome-shell|/usr/bin/metacity|/usr/bin/mutter|/usr/lib/gnome-session/gnome-session-binary|/usr/libexec/gnome-session-binary|/usr/libexec/gnome-session-ctl)$
+      @BADNESS_ADJ_RE_REALPATH -200  ///  ^/nix/store/.*(/bin/gnome-shell|/bin/metacity|/bin/mutter|/lib/gnome-session/gnome-session-binary|/libexec/gnome-session-binary|/libexec/gnome-session-ctl)$
 
           Protect KDE Plasma.
-      @BADNESS_ADJ_RE_REALPATH -200  ///  ^(/usr/bin/plasma-desktop|/usr/bin/plasmashell|/usr/bin/plasma_session|/usr/bin/kwin|/usr/bin/kwin_x11|/usr/bin/kwin_wayland)$
-      @BADNESS_ADJ_RE_REALPATH -200  ///  ^(/usr/bin/startplasma-wayland|/usr/lib/x86_64-linux-gnu/libexec/startplasma-waylandsession|/usr/bin/ksmserver)$
+      @BADNESS_ADJ_RE_REALPATH -200  ///  ^/nix/store/.*(/bin/plasma-desktop|/bin/plasmashell|/bin/plasma_session|/bin/kwin|/bin/kwin_x11|/bin/kwin_wayland)$
+      @BADNESS_ADJ_RE_REALPATH -200  ///  ^/nix/store/.*(/bin/startplasma-wayland|/lib/x86_64-linux-gnu/libexec/startplasma-waylandsession|/bin/ksmserver)$
 
           Protect Cinnamon.
-      @BADNESS_ADJ_RE_REALPATH -200  ///  ^(/usr/bin/cinnamon|/usr/bin/muffin|/usr/bin/cinnamon-session|/usr/bin/cinnamon-launcher)$
+      @BADNESS_ADJ_RE_REALPATH -200  ///  ^/nix/store/.*(/bin/cinnamon|/bin/muffin|/bin/cinnamon-session|/bin/cinnamon-launcher)$
 
           Protect Xfce.
-      @BADNESS_ADJ_RE_REALPATH -200  ///  ^(/usr/bin/xfwm4|/usr/bin/xfce4-session|/usr/bin/xfce4-panel|/usr/bin/xfdesktop)$
+      @BADNESS_ADJ_RE_REALPATH -200  ///  ^/nix/store/.*(/bin/xfwm4|/bin/xfce4-session|/bin/xfce4-panel|/bin/xfdesktop)$
 
           Protect Mate.
-      @BADNESS_ADJ_RE_REALPATH -200  ///  ^(/usr/bin/marco|/usr/bin/mate-session|/usr/bin/caja|/usr/bin/mate-panel)$
+      @BADNESS_ADJ_RE_REALPATH -200  ///  ^/nix/store/.*(/bin/marco|/bin/mate-session|/bin/caja|/bin/mate-panel)$
 
           Protect LXQt.
-      @BADNESS_ADJ_RE_REALPATH -200  ///  ^(/usr/bin/lxqt-panel|/usr/bin/pcmanfm-qt|/usr/bin/lxqt-session)$
+      @BADNESS_ADJ_RE_REALPATH -200  ///  ^/nix/store/.*(/bin/lxqt-panel|/bin/pcmanfm-qt|/bin/lxqt-session)$
 
           Protect Budgie Desktop.
-      @BADNESS_ADJ_RE_REALPATH -200  ///  ^(/usr/bin/budgie-wm|/usr/bin/budgie-panel)$
+      @BADNESS_ADJ_RE_REALPATH -200  ///  ^/nix/store/.*(/bin/budgie-wm|/bin/budgie-panel)$
 
           Protect other.
-      @BADNESS_ADJ_RE_REALPATH -200  ///  ^(/usr/bin/compiz|/usr/bin/openbox|/usr/bin/fluxbox|/usr/bin/awesome|/usr/bin/icewm|/usr/bin/enlightenment|/usr/bin/gala|/usr/bin/wingpanel|/usr/bin/i3)$
+      @BADNESS_ADJ_RE_REALPATH -200  ///  ^/nix/store/.*(/bin/compiz|/bin/openbox|/bin/fluxbox|/bin/awesome|/bin/icewm|/bin/enlightenment|/bin/gala|/bin/wingpanel|/bin/i3)$
 
           Protect display managers.
-      @BADNESS_ADJ_RE_REALPATH -200  ///  ^(/usr/sbin/gdm|/usr/sbin/gdm3|/usr/sbin/sddm|/usr/bin/sddm|/usr/lib/x86_64-linux-gnu/sddm/sddm-helper|/usr/bin/slim|/usr/sbin/lightdm|/usr/libexec/gdm-session-worker|/usr/libexec/gdm-wayland-session|/usr/lib/gdm3/gdm-wayland-session|/usr/lib/gdm3/gdm-session-worker)$
-      @BADNESS_ADJ_RE_REALPATH -200  ///  ^/usr/lib/gdm3/
+      @BADNESS_ADJ_RE_REALPATH -200  ///  ^/nix/store/.*(/sbin/gdm|/sbin/gdm3|/sbin/sddm|/bin/sddm|/lib/x86_64-linux-gnu/sddm/sddm-helper|/bin/slim|/sbin/lightdm|/libexec/gdm-session-worker|/libexec/gdm-wayland-session|/lib/gdm3/gdm-wayland-session|/lib/gdm3/gdm-session-worker)$
+      @BADNESS_ADJ_RE_REALPATH -200  ///  ^/nix/store/.*/lib/gdm3/
 
           Protect systemd-logind.
-      @BADNESS_ADJ_RE_REALPATH -200  ///  ^(/lib/systemd/systemd-logind|/usr/lib/systemd/systemd-logind)$
+      @BADNESS_ADJ_RE_REALPATH -200  ///  ^/nix/store/.*(/lib/systemd/systemd-logind|/lib/systemd/systemd-logind)$
 
           Protect `systemd --user`.
-      @BADNESS_ADJ_RE_REALPATH -200  ///  ^(/lib/systemd/systemd|/usr/lib/systemd/systemd)$
+      @BADNESS_ADJ_RE_REALPATH -200  ///  ^/nix/store/.*(/lib/systemd/systemd|/lib/systemd/systemd)$
 
           Protect dbus.
-      @BADNESS_ADJ_RE_REALPATH -200  ///  ^(/usr/bin/dbus-daemon|/usr/bin/dbus-run-session|/usr/bin/dbus-broker-launcher|/usr/bin/dbus-broker)$
+      @BADNESS_ADJ_RE_REALPATH -200  ///  ^/nix/store/.*(/bin/dbus-daemon|/bin/dbus-run-session|/bin/dbus-broker-launcher|/bin/dbus-broker)$
 
           Protect package managers and distro installers.
-      @BADNESS_ADJ_RE_REALPATH -200  ///  ^(/usr/bin/calamares|/usr/bin/dpkg|/usr/bin/pacman|/usr/bin/yay|/usr/bin/pamac|/usr/bin/pamac-daemon|/usr/bin/pamac-manager)$
+      @BADNESS_ADJ_RE_REALPATH -200  ///  ^/nix/store/.*(/bin/calamares|/bin/dpkg|/bin/pacman|/bin/yay|/bin/pamac|/bin/pamac-daemon|/bin/pamac-manager)$
 
           Prefer stress.
-          @BADNESS_ADJ_RE_REALPATH  900  ///  ^(/usr/bin/stress|/usr/bin/stress-ng)$
+          @BADNESS_ADJ_RE_REALPATH  900  ///  ^/nix/store/.*(/bin/stress|/bin/stress-ng)$
 
 
           7.2.6. Matching /proc/[pid]/cwd realpath with RE patterns
@@ -421,7 +421,7 @@
           Prefer Firefox tabs (Web Content and WebExtensions)
           @BADNESS_ADJ_RE_CMDLINE  100 /// -appomni
 
-          @BADNESS_ADJ_RE_CMDLINE -200 /// ^/usr/lib/virtualbox
+          @BADNESS_ADJ_RE_CMDLINE -200 /// ^/nix/store/.*/lib/virtualbox
 
           7.2.8. Matching environ with RE patterns
           WARNING: using this option can greatly slow down the search for a victim
