@@ -66,14 +66,14 @@
     };
     plain = {
       reliable = [
-        "1.1.1.1" # Cloudflare
-        "1.0.0.1" # Cloudflare
-        "8.8.8.8" # Google
-        "8.8.4.4" # Google
-        "9.9.9.11" # Quad9
-        "149.112.112.11" # Quad9
-        "94.140.14.141" # Adguard 
-        "94.140.14.140" # Adguard
+        "1.1.1.1 -b" # Cloudflare
+        "1.0.0.1 -b" # Cloudflare
+        "8.8.8.8 -b" # Google
+        "8.8.4.4 -b" # Google
+        "9.9.9.11 -b" # Quad9
+        "149.112.112.11 -b" # Quad9
+        "94.140.14.141 -b" # Adguard 
+        "94.140.14.140 -b" # Adguard
       ];
       russian = [
         #"193.58.251.251" # SkyDNS
