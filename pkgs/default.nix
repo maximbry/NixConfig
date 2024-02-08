@@ -16,4 +16,5 @@
     withHolmes = false;
   };
   zotero-7 = pkgs.callPackage ./zotero-7 {};
+  lazarus-git = pkgs.callPackage ./lazarus-git {};
 }
