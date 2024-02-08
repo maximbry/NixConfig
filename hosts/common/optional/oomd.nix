@@ -638,4 +638,8 @@
           https://github.com/hakavlad/nohang/issues
     '';
   };
+
+  services.dbus.packages = [
+    pkgs.nohang
+  ];
 }
