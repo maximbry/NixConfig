@@ -17,4 +17,5 @@
   };
   zotero-7 = pkgs.callPackage ./zotero-7 {};
   lazarus-git = pkgs.callPackage ./lazarus-git {};
+  doom2d-forever-editor = pkgs.callPackage ./doom2d-forever-editor {};
 }

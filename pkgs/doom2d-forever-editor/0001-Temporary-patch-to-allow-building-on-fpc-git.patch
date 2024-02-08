@@ -1,0 +1,48 @@
+From e23ead97a9e3f7153f3464680d1ae4305dbcbe1a Mon Sep 17 00:00:00 2001
+From: maximbry <github@maximbry.anonaddy.com>
+Date: Thu, 8 Feb 2024 18:58:23 +0300
+Subject: [PATCH] Temporary patch to allow building on fpc-git
+
+---
+ src/editor/Editor.lpr           | 2 +-
+ src/lib/vampimg/ImagingJpeg.pas | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/editor/Editor.lpr b/src/editor/Editor.lpr
+index 6075985..c9bb370 100644
+--- a/src/editor/Editor.lpr
++++ b/src/editor/Editor.lpr
+@@ -231,7 +231,7 @@ uses
+ 
+ begin
+   Application.ExceptionDialog := aedOkMessageBox;
+-  Application.AddOnExceptionHandler(THandlerObject.ExceptionHandler, True);
++  // Application.AddOnExceptionHandler(THandlerObject.ExceptionHandler, True);
+   Application.Initialize();
+   {$IFDEF DARWIN}
+     // Disable icons in menu on OSX by default
+diff --git a/src/lib/vampimg/ImagingJpeg.pas b/src/lib/vampimg/ImagingJpeg.pas
+index ef9a5e7..d76a308 100644
+--- a/src/lib/vampimg/ImagingJpeg.pas
++++ b/src/lib/vampimg/ImagingJpeg.pas
+@@ -228,14 +228,14 @@ procedure JpegError(CInfo: j_common_ptr);
+     Buffer: AnsiString;
+   begin
+     // Create the message and raise exception
+-    CInfo.err.format_message(CInfo, Buffer);
++    // CInfo.err.format_message(CInfo, Buffer);
+     // Warning: you can get "Invalid argument index in format" exception when
+     // using FPC (see http://bugs.freepascal.org/view.php?id=21229).
+     // Fixed in FPC 2.7.1
+   {$IF Defined(FPC) and (FPC_FULLVERSION <= 20701)}
+-    raise EImagingError.CreateFmt(SJPEGError + ' %d', [CInfo.err.msg_code]);
++    raise EImagingError.CreateFmt(SJPEGError + ' %d', [1]);
+   {$ELSE}
+-    raise EImagingError.CreateFmt(SJPEGError + ' %d: ' + string(Buffer), [CInfo.err.msg_code]);
++    raise EImagingError.CreateFmt(SJPEGError + ' %d: ', [1]);
+   {$IFEND}
+   end;
+ 
+-- 
+2.43.0
+
