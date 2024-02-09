@@ -38,7 +38,6 @@ in pkgs.stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preInstall
     cd src/editor
-    echo 4
     cat << EOF > nosched.c
     #define _GNU_SOURCE
     #include <dlfcn.h>
@@ -52,8 +51,6 @@ in pkgs.stdenv.mkDerivation rec {
     }
 
     // https://stackoverflow.com/questions/15599026/how-can-i-intercept-dlsym-calls-using-ld-preload/18825060#18825060
-    //void* _dl_sym(void*, const char*, void*);
-    // extern void* dlvsym(void*, const char*, const char*);
 
     static void* (*libc_dlvsym)(void*, const char*) = NULL;
     static void* (*libc_dlsym)(void*, const char*) = NULL;
@@ -61,9 +58,6 @@ in pkgs.stdenv.mkDerivation rec {
     void* dlsym(void* handle, const char* symbol) {
 
       if (!libc_dlsym) {
-        // libc_dlsym = _dl_sym(RTLD_NEXT, "dlsym", dlsym);
-        // libc_dlsym = dlvsym(RTLD_NEXT, "dlsym", dlsym);
-        // libc_dlvsym = dlvsym(RTLD_NEXT, "dlsym", "GLIBC_2.2.5");
         libc_dlsym = dlvsym(RTLD_NEXT, "dlsym", "GLIBC_2.2.5");
       }
 
