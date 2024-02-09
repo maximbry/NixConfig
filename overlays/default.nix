@@ -12,7 +12,7 @@
   };
 
   additions = final: _prev: import ../pkgs { pkgs = final; };
-  modifications = final: prev: {
+  modifications = final: prev: rec {
     doom2d-forever = prev.doom2d-forever.override {
       fpc = final.fpc-git;
       targetProcessorSoft = "X86-64-V3";

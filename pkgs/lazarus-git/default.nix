@@ -1,6 +1,10 @@
 { stdenv, lib, fetchgit, makeWrapper, writeText, fpc-git, gtk2, glib, pango, atk
 , gdk-pixbuf, libXi, xorgproto, libX11, libXext, gdb, gnumake, binutils
-, withQt ? false, qtbase ? null, libqt5pas ? null, wrapQtAppsHook ? null }:
+, withQt5 ? false, qtbase ? null, libqt5pas-git ? null, wrapQtAppsHook ? null
+, withQt6 ? false
+, withGtk3 ? false
+, withGtk2 ? false
+, ...}:
 
 # TODO:
 #  1. the build date is embedded in the binary through `$I %DATE%` - we should dump that
@@ -48,13 +52,13 @@ in stdenv.mkDerivation rec {
     atk
     stdenv.cc
     gdk-pixbuf
-  ] ++ lib.optionals withQt [ libqt5pas qtbase ];
+  ] ++ lib.optionals withQt5 [ libqt5pas-git qtbase ];
 
   # Disable parallel build, errors:
   #  Fatal: (1018) Compilation aborted
   enableParallelBuilding = false;
 
-  nativeBuildInputs = [ makeWrapper ] ++ lib.optional withQt wrapQtAppsHook;
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional withQt5 wrapQtAppsHook;
 
   makeFlags = [
     "FPC=fpc"
@@ -65,7 +69,7 @@ in stdenv.mkDerivation rec {
     "bigide"
   ];
 
-  LCL_PLATFORM = if withQt then "qt5" else "gtk2";
+  LCL_PLATFORM = if withQt5 then "qt5" else if withQt6 then "qt6" else if withGtk2 then "gtk2" else "gtk3";
 
   NIX_LDFLAGS = lib.concatStringsSep " " ([
     "-L${stdenv.cc.cc.lib}/lib"
@@ -81,7 +85,7 @@ in stdenv.mkDerivation rec {
     "-lglib-2.0"
     "-lgtk-x11-2.0"
     "-lpango-1.0"
-  ] ++ lib.optionals withQt [ "-L${lib.getLib libqt5pas}/lib" "-lQt5Pas" ]);
+  ] ++ lib.optionals withQt5 [ "-L${lib.getLib libqt5pas-git}/lib" "-lQt5Pas" ]);
 
   preBuild = ''
     mkdir -p $out/share/fpcsrc "$out/lazarus"

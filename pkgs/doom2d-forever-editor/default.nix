@@ -1,8 +1,13 @@
-{ pkgs, lib, fetchgit, lazarus-git, lazarus-qt, autoPatchelfHook, libX11
-, fpc-git, fakeroot, ... }:
+{ pkgs, lib, fetchgit, autoPatchelfHook, fpc-git, libX11
+, withGtk2 ? false, lazarus-git
+, withQt5 ? true, lazarus-git-qt5, qtbase ? null, libqt5pas-git ? null, wrapQtAppsHook ? null
+, withQt6 ? false, lazarus-git-qt6
+, withGtk3 ? false, lazarus-git-gtk3
+, ... }:
 let
   fpc = fpc-git;
-  lazarus = lazarus-git;
+  lazarus = if withGtk2 then lazarus-git else if withGtk3 then lazarus-git-gtk3 else if withQt5 then lazarus-git-qt5 else lazarus-git-qt6;
+  libqt5pas = libqt5pas-git;
   rev = "a1e98e052e6d8dbf38d45d9ef7338bfd758b9f48";
 in pkgs.stdenv.mkDerivation rec {
   pname = "doom2d-forever-editor";
@@ -24,12 +29,16 @@ in pkgs.stdenv.mkDerivation rec {
     cairo
     gdk-pixbuf
     gcc
-  ];
+  ]
+  ++ lib.optionals withQt5 [ libqt5pas qtbase ];
   buildInputs = with pkgs; [ gtk2 glibc libGL libX11 pango cairo gdk-pixbuf ];
 
   patches = [ ./0001-Temporary-patch-to-allow-building-on-fpc-git.patch ];
 
-  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+  NIX_LDFLAGS = lib.concatStringsSep " " ([
+    "--as-needed -rpath ${lib.makeLibraryPath buildInputs}"
+  ] ++ lib.optionals withQt5 [ "-L${lib.getLib libqt5pas}/lib" "-lQt5Pas" ]);
+
   env = {
     D2DF_BUILD_USER = "nixbld";
     D2DF_BUILD_HASH = "${rev}";
@@ -72,7 +81,7 @@ in pkgs.stdenv.mkDerivation rec {
     EOF
     gcc -shared nosched.c -ldl -o nosched.so
     chmod +x nosched.so
-    INSTANTFPCCACHE=./lazarus LD_PRELOAD=$PWD/nosched.so lazbuild --lazarusdir=${lazarus}/share/lazarus --pcp=./lazarus --bm=Debug Editor.lpi
+    INSTANTFPCCACHE=./lazarus LD_PRELOAD=$PWD/nosched.so lazbuild --ws=${if withQt6 then "qt6" else if withQt5 then "qt5" else if withGtk3 then "gtk3" else "gtk2"} --lazarusdir=${lazarus}/share/lazarus --pcp=./lazarus --bm=Release Editor.lpi
     runHook postInstall
   '';
 
