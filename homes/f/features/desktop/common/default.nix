@@ -9,5 +9,7 @@
     genpw
     telegram-desktop
     pkgs.inputs.nixpkgs-master.pdfannots2json
+    doom2d-forever-editor
+    cntr
   ];
 }
