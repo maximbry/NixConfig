@@ -3,12 +3,13 @@
 let
   fpc = fpc-git;
   lazarus = lazarus-git;
+  rev = "a1e98e052e6d8dbf38d45d9ef7338bfd758b9f48";
 in pkgs.stdenv.mkDerivation rec {
   pname = "doom2d-forever-editor";
   version = "v0.667-git-a1e98e0";
   src = fetchgit {
     url = "https://repo.or.cz/d2df-editor.git";
-    rev = "a1e98e052e6d8dbf38d45d9ef7338bfd758b9f48";
+    inherit rev;
     sha256 = "sha256-JTBYHfZk6Qgjdmr5Nb7n6juMLjhmgFTe1xIrzgg1JYY=";
   };
   nativeBuildInputs = with pkgs; [
@@ -22,35 +23,17 @@ in pkgs.stdenv.mkDerivation rec {
     pango
     cairo
     gdk-pixbuf
-    fakeroot
-    fakechroot
-    coreutils
-    util-linux
-    gdb
-    #breakpointHook
-    strace
-    libcap
     gcc
   ];
-  buildInputs = with pkgs; [
-    gtk2
-    glibc
-    libGL
-    libX11
-    pango
-    cairo
-    gdk-pixbuf
-    fakeroot
-    fakechroot
-    coreutils
-    util-linux
-    gdb
-    libcap
-  ];
+  buildInputs = with pkgs; [ gtk2 glibc libGL libX11 pango cairo gdk-pixbuf ];
 
   patches = [ ./0001-Temporary-patch-to-allow-building-on-fpc-git.patch ];
 
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+  env = {
+    D2DF_BUILD_USER = "nixbld";
+    D2DF_BUILD_HASH = "${rev}";
+  };
   enableParallelBuilding = false;
   buildPhase = ''
     runHook preInstall
