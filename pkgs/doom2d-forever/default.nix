@@ -141,7 +141,7 @@ let
     patches = [ ./0001-feat-respect-SOURCE_DATE_EPOCH.patch ./0001-fix-Fix-compilation-on-FPC-3.3.1.patch ];
 
     env = {
-      D2DF_BUILD_USER = "nix";
+      D2DF_BUILD_USER = "nixbld";
       D2DF_BUILD_HASH = "${rev}";
     };
 
