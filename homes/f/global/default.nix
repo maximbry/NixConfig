@@ -78,7 +78,9 @@
           ".local/share/bottles"
           ".local/share/TelegramDesktop"
           ".local/bin"
+          ".local/share/kwalletd"
 
+          ".config/kwalletrc"
           ".config/chromium"
           ".config/Code"
           ''.config/"Code - Insiders"''
