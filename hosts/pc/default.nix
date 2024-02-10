@@ -31,6 +31,7 @@
   services.xserver.enable = true;
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
+  security.pam.services.login.enableKwallet = true;
 
   services.ivpn = { enable = true; };
   programs.adb.enable = true;
