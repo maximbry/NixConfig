@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "zapret";
-  version = "git-3f80ae2";
+  version = "git-368b207";
   src = fetchFromGitHub {
     owner = "bol-van";
     repo = pname;
-    rev = "3f80ae2dd7b972942db7a7983bab2ece2957f7bf";
-    sha256 = "sha256-vKs2geD+eKs4hbvPjrLQhCkKWgVVvn31R8KWWe7VZ4k=";
+    rev = "368b2074847363b18fcd0f5c627c4967d5ce952c";
+    sha256 = "sha256-Tg80mTOGgTX0iXVrZzy2T4eraNNAgEgo8DYQdeHQAHQ=";
   };
 
   propagatedBuildInputs = with pkgs; [
