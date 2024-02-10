@@ -12,4 +12,20 @@
     doom2d-forever-editor
     cntr
   ];
+
+  services.gpg-agent = {
+    enable = true;
+    enableSshSupport = false;
+    defaultCacheTtl = 86400;
+    defaultCacheTtlSsh = 86400;    
+    maxCacheTtl = 86400;
+    maxCacheTtlSsh = 86400;
+    enableExtraSocket = true;
+    grabKeyboardAndMouse = true;
+    enableScDaemon = true;
+    pinentryFlavor = null;
+    extraConfig = ''
+    pinentry-program ${pkgs.kwalletcli}/bin/pinentry-kwallet
+    '';
+  };
 }
